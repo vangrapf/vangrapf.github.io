@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vangrapf</title>
+    <title>Vangrapf — YouTube Search</title>
     <style>
         * {
             margin: 0;
@@ -200,11 +200,6 @@
         .video-card .duration {
             font-size: 0.75rem;
             color: #666;
-            margin-top: 2px;
-        }
-        .video-card .published {
-            font-size: 0.7rem;
-            color: #555;
             margin-top: 2px;
         }
         .video-card .actions {
@@ -480,7 +475,7 @@
 
 <script>
     // ----- Константы -----
-    const DEFAULT_PROXY_LIST_URL = "https://gitverse.ru/api/repos/vangrapf/proxylist/raw/branch/main/proxylist.txt";
+    const DEFAULT_PROXY_LIST_URL = "https://raw.githubusercontent.com/vangrapf/proxylist/refs/heads/main/proxylist.txt";
 
     // ----- Состояние -----
     let currentProxy = '';
@@ -673,8 +668,6 @@
             const title = video.title || 'No title';
             const channel = video.channel || video.uploader || video.author || '';
             const duration = video.duration ? formatDuration(video.duration) : '';
-            const uploadDate = video.upload_date || video.published || '';
-            const publishedFormatted = uploadDate ? formatDate(uploadDate) : '';
 
             card.innerHTML = `
                 <div class="video-cover">Unloadable cover</div>
@@ -682,7 +675,6 @@
                     <div class="title">${escapeHtml(title)}</div>
                     <div class="channel">${escapeHtml(channel)}</div>
                     <div class="duration">${duration}</div>
-                    <div class="published">${publishedFormatted}</div>
                 </div>
                 <div class="actions">
                     <button class="copy-btn" data-url="${url}">Copy link</button>
@@ -719,21 +711,6 @@
             return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         } else {
             return `${m}:${String(s).padStart(2, '0')}`;
-        }
-    }
-
-    function formatDate(dateStr) {
-        if (!dateStr) return '';
-        // expected format: YYYYMMDD or YYYY-MM-DD
-        let cleaned = dateStr.replace(/-/g, '');
-        if (cleaned.length === 8) {
-            const year = cleaned.slice(0, 4);
-            const month = cleaned.slice(4, 6);
-            const day = cleaned.slice(6, 8);
-            return `${day}.${month}.${year}`;
-        } else {
-            // if format unknown, return as is
-            return dateStr;
         }
     }
 
