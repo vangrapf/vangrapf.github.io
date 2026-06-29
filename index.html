@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Vangrapf</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vangrapf — YouTube Search</title>
     <style>
         * {
             margin: 0;
@@ -12,250 +12,911 @@
         }
         body {
             background: #0a0a0a;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             color: #f0f0f0;
-            line-height: 1.5;
-            padding: 2rem 1rem;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         .header {
-            text-align: center;
-            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #1a1a1a;
         }
         .logo {
-            font-size: 3rem;
+            font-size: 1.4rem;
             font-weight: 800;
             background: linear-gradient(135deg, #ff0050, #ff9900);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.02em;
         }
-        .tagline {
-            font-size: 1.1rem;
-            color: #aaa;
-            margin-top: 0.5rem;
-        }
-        .card {
-            background: #1e1e1e;
-            border-radius: 32px;
-            padding: 1.5rem 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid #2c2c2c;
-            transition: 0.2s;
-        }
-        .card-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            border-left: 4px solid #ff9900;
-            padding-left: 1rem;
-        }
-        .warning {
-            background: #2a1a0a;
-            border-left: 4px solid #ff9900;
-            color: #ffcc88;
-        }
-        .code-block {
-            background: #0a0a0a;
-            border-radius: 16px;
-            padding: 1rem;
-            overflow-x: auto;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 0.85rem;
-            margin: 1rem 0;
-            border: 1px solid #2c2c2c;
-        }
-        pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        .copy-btn {
-            background: #2c2c2c;
-            border: none;
-            color: #ff9900;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            cursor: pointer;
-            float: right;
-            margin-top: -2rem;
-            transition: 0.2s;
-        }
-        .copy-btn:hover {
-            background: #3a3a3a;
-        }
-        .grid-2 {
+        .header-right {
             display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
         }
-        .grid-2 > div {
+        .proxy-status {
+            font-size: 0.7rem;
+            color: #888;
+            background: #1a1a1a;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .proxy-status.online {
+            color: #4caf50;
+        }
+        .settings-icon {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: 0.2s;
+            line-height: 1;
+        }
+        .settings-icon:hover {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .main {
             flex: 1;
-            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            transition: all 0.3s;
         }
-        .btn {
-            display: inline-block;
+        .main.has-results {
+            justify-content: flex-start;
+            padding-top: 16px;
+        }
+        .logo-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff0050, #ff9900);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 4px;
+            letter-spacing: -2px;
+            transition: all 0.3s;
+        }
+        .main.has-results .logo-big {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 28px;
+            transition: all 0.3s;
+        }
+        .main.has-results .subtitle {
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            color: #666;
+        }
+        .search-box {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 640px;
+            background: #1a1a1a;
+            padding: 6px 6px 6px 18px;
+            border-radius: 60px;
+            border: 1px solid #2a2a2a;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .search-box:focus-within {
+            border-color: #ff9900;
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.15);
+        }
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 0;
+            font-size: 1.05rem;
+            color: #fff;
+            outline: none;
+        }
+        .search-box input::placeholder {
+            color: #555;
+        }
+        .search-box button {
+            background: #ff9900;
+            border: none;
+            color: #0a0a0a;
+            font-weight: 600;
+            padding: 10px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .search-box button:hover {
+            background: #ffaa22;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 24px;
+            padding: 0 20px;
+        }
+        .video-card {
+            background: #161616;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: default;
+        }
+        .video-card:hover {
+            transform: translateY(-4px);
+            border-color: #ff9900;
+        }
+        .video-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-size: 0.85rem;
+            font-weight: 300;
+        }
+        .video-card .info {
+            padding: 10px 14px 6px;
+        }
+        .video-card .title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+        .video-card .channel {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .video-card .duration {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 2px;
+        }
+        .video-card .published {
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 2px;
+        }
+        .video-card .actions {
+            display: flex;
+            gap: 6px;
+            padding: 8px 14px 14px;
+        }
+        .video-card .actions button {
+            flex: 1;
+            background: #2a2a2a;
+            border: none;
+            padding: 6px 0;
+            border-radius: 30px;
+            color: #ccc;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .video-card .actions button.copy-btn {
             background: #ff9900;
             color: #0a0a0a;
             font-weight: 600;
-            padding: 0.6rem 1.2rem;
-            border-radius: 40px;
-            text-decoration: none;
-            margin-top: 0.5rem;
-            transition: 0.2s;
         }
-        .btn:hover {
+        .video-card .actions button.copy-btn:hover {
             background: #ffaa22;
         }
-        hr {
-            border-color: #2c2c2c;
-            margin: 1.5rem 0;
+        .video-card .actions button.download-btn {
+            background: #2a6a2a;
+            color: #fff;
         }
-        .footer {
+        .video-card .actions button.download-btn:hover {
+            background: #3a8a3a;
+        }
+
+        .status {
+            margin-top: 16px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: #1a1a1a;
+            color: #aaa;
             text-align: center;
+            font-size: 0.9rem;
+            max-width: 600px;
+            width: 100%;
+        }
+        .status.error {
+            background: #2a0a0a;
+            color: #ff6666;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a2a2a;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 2000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Модальное окно прогресса загрузки */
+        .download-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1500;
+            justify-content: center;
+            align-items: center;
+        }
+        .download-modal.active {
+            display: flex;
+        }
+        .download-modal .modal-content {
+            background: #1a1a1a;
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #2a2a2a;
+        }
+        .download-modal .modal-content h3 {
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+        .download-modal .progress-track {
+            width: 100%;
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+        .download-modal .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ff9900;
+            transition: width 0.2s;
+        }
+        .download-modal .progress-text {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .download-modal .close-dl-btn {
+            margin-top: 20px;
+            background: #2a2a2a;
+            border: none;
+            color: #ccc;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+        .download-modal .close-dl-btn:hover {
+            background: #3a3a3a;
+        }
+
+        /* Модалка настроек */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: #1a1a1a;
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            border: 1px solid #2a2a2a;
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            border-left: 3px solid #ff9900;
+            padding-left: 12px;
+        }
+        .modal label {
+            display: block;
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 16px;
+            margin-bottom: 4px;
+        }
+        .modal input {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            padding: 10px 14px;
+            border-radius: 40px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .modal input:focus {
+            border-color: #ff9900;
+        }
+        .modal .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: flex-end;
+        }
+        .modal .actions button {
+            padding: 10px 24px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal .actions .save-btn {
+            background: #ff9900;
+            color: #0a0a0a;
+        }
+        .modal .actions .save-btn:hover {
+            background: #ffaa22;
+        }
+        .modal .actions .close-btn {
+            background: #2a2a2a;
+            color: #ccc;
+        }
+        .modal .actions .close-btn:hover {
+            background: #3a3a3a;
+        }
+        .modal .info-text {
+            margin-top: 16px;
             font-size: 0.8rem;
             color: #666;
-            margin-top: 3rem;
-        }
-        @media (max-width: 700px) {
-            .card {
-                padding: 1rem;
-            }
-            .card-title {
-                font-size: 1.3rem;
-            }
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <div class="logo">Vangrapf</div>
-        <div class="tagline">watch and download videos without blocks and ads</div>
+
+<header class="header">
+    <div class="logo">Vangrapf</div>
+    <div class="header-right">
+        <span class="proxy-status" id="proxyStatusLabel">loading...</span>
+        <button class="settings-icon" id="settingsToggle">☰</button>
     </div>
+</header>
 
-    <div class="card warning">
-        <div class="card-title">Web service temporarily unavailable</div>
-        <p>Due to maintenance or high load, our online player is currently down. However, you can use <strong>Vangrapf CLI</strong> — it is fully functional and works on any platform (Linux, Windows, macOS).</p>
-        <p>With the CLI you can watch and download videos from <strong>YouTube, RuTube, VK Video, OK</strong> without ads, through your own proxy or directly.</p>
+<main class="main" id="mainArea">
+    <div class="logo-big" id="logoBig">Vangrapf</div>
+    <div class="subtitle" id="subtitle">start searching</div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search on YouTube..." autofocus>
+        <button id="searchBtn">Search</button>
     </div>
+    <div id="resultsContainer" class="results"></div>
+    <div id="statusMessage" class="status"></div>
+</main>
 
-    <div class="card">
-        <div class="card-title">Quick installation of Vangrapf CLI</div>
-        <p>All you need is <strong>Python 3.8+</strong> and <code>pip</code>. The <strong>mpv</strong> player is required for watching (instructions below).</p>
+<!-- Toast уведомление -->
+<div id="toast" class="toast">Copied</div>
 
-        <div class="grid-2">
-            <div>
-                <h3>Linux / macOS</h3>
-                <div class="code-block" id="linuxCmd">
-                    <pre>curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py | python - --help</pre>
-                </div>
-                <button class="copy-btn" data-cmd="linuxCmd">Copy</button>
-                <p style="margin-top: 0.5rem;">Install dependencies:</p>
-                <div class="code-block" id="linuxPip">
-                    <pre>pip install yt-dlp rich requests</pre>
-                </div>
-                <button class="copy-btn" data-cmd="linuxPip">Copy</button>
-                <p style="margin-top: 0.5rem;">Install mpv:</p>
-                <div class="code-block" id="linuxMpv">
-                    <pre>sudo apt install mpv   # Debian/Ubuntu<br>brew install mpv       # macOS</pre>
-                </div>
-                <button class="copy-btn" data-cmd="linuxMpv">Copy</button>
-            </div>
-            <div>
-                <h3>Windows (PowerShell)</h3>
-                <div class="code-block" id="winCmd">
-                    <pre>curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py | python --help</pre>
-                </div>
-                <button class="copy-btn" data-cmd="winCmd">Copy</button>
-                <p style="margin-top: 0.5rem;">Install dependencies:</p>
-                <div class="code-block" id="winPip">
-                    <pre>pip install yt-dlp rich requests</pre>
-                </div>
-                <button class="copy-btn" data-cmd="winPip">Copy</button>
-                <p style="margin-top: 0.5rem;">Install mpv:</p>
-                <div class="code-block" id="winMpv">
-                    <pre>Download mpv from https://mpv.io/installation/ and add to PATH</pre>
-                </div>
-                <button class="copy-btn" data-cmd="winMpv">Copy</button>
-            </div>
+<!-- Модальное окно загрузки -->
+<div id="downloadModal" class="download-modal">
+    <div class="modal-content">
+        <h3 id="dlTitle">Downloading...</h3>
+        <div class="progress-track">
+            <div class="progress-fill" id="dlProgress"></div>
         </div>
+        <div class="progress-text" id="dlStatus">0%</div>
+        <button class="close-dl-btn" id="dlCloseBtn">Cancel</button>
     </div>
+</div>
 
-    <div class="card">
-        <div class="card-title">Cookies for YouTube (recommended)</div>
-        <p>To bypass YouTube blocking, export cookies from your browser and pass them to the script:</p>
-        <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
-            <li>Install the extension <strong>"Get cookies.txt LOCALLY"</strong> (Chrome/Firefox).</li>
-            <li>Log into YouTube, click the extension icon → Export → save <code>cookies.txt</code>.</li>
-            <li>Pass the file with <code>--cookies ./cookies.txt</code> when running.</li>
-        </ol>
-        <div class="code-block" id="cookiesExample">
-            <pre>python <(curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py) --watch "https://youtu.be/dQw4w9WgXcQ" --cookies ./cookies.txt</pre>
+<!-- Модалка настроек -->
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+        <h2>Settings</h2>
+        <label for="proxyInput">Proxy server (leave empty for auto-select)</label>
+        <input type="text" id="proxyInput" placeholder="https://your-proxy.onrender.com">
+
+        <label for="proxyListInput">Proxy list URL</label>
+        <input type="text" id="proxyListInput" placeholder="https://raw.githubusercontent.com/.../proxylist.txt">
+
+        <div class="actions">
+            <button class="close-btn" id="closeSettingsBtn">Cancel</button>
+            <button class="save-btn" id="saveSettingsBtn">Save</button>
         </div>
-        <button class="copy-btn" data-cmd="cookiesExample">Copy</button>
-    </div>
-
-    <div class="card">
-        <div class="card-title">Usage examples</div>
-        <div class="code-block" id="exampleWatch">
-            <pre># Watch video (with auto-proxy for YouTube)
-python <(curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py) --watch "https://youtu.be/dQw4w9WgXcQ" --cookies cookies.txt
-
-# Download video from RuTube (proxy not needed)
-python <(curl -s ...) --download "https://rutube.ru/video/6d2c586de0a03c9b885ddfd2c5c7b456/" -o ~/Videos/
-
-# Search and watch
-python <(curl -s ...) --search "cute cats" --watch --cookies cookies.txt
-
-# Use your own proxy
-python <(curl -s ...) --watch "URL" --proxy https://your-proxy.onrender.com</pre>
-        </div>
-        <button class="copy-btn" data-cmd="exampleWatch">Copy</button>
-        <p style="margin-top: 1rem;">Full list of options: <code>--help</code></p>
-    </div>
-
-    <div class="card">
-        <div class="card-title">Troubleshooting: ModuleNotFoundError: No module named 'rich'</div>
-        <p>If you installed dependencies but the script still cannot find <strong>rich</strong>, try the following:</p>
-        <ul style="margin-left: 1.5rem;">
-            <li>Make sure you are using the <strong>same Python interpreter</strong> that you used to install packages. Check <code>which python</code> and <code>which pip</code> – paths should match.</li>
-            <li>Install rich explicitly for the current user: <code>python -m pip install rich --user</code> (Linux/macOS) or <code>py -m pip install rich --user</code> (Windows).</li>
-            <li>If using a virtual environment, activate it before running.</li>
-            <li>Reinstall rich: <code>pip uninstall rich -y && pip install rich</code>.</li>
-            <li>On Windows, run PowerShell <strong>as Administrator</strong> when installing.</li>
-        </ul>
-        <p>If nothing helps, clear pip cache: <code>pip cache purge</code> and install again.</p>
-    </div>
-
-    <div class="footer">
-        Vangrapf is a free project that does not violate copyright. You use the official YouTube IFrame or direct links via proxy.<br>
-        Repository: <a href="https://github.com/vangrapf/vangrapf-cli" style="color:#ff9900;">github.com/vangrapf/vangrapf-cli</a>
+        <div class="info-text">Proxy will be automatically selected from the list if the field is empty.</div>
     </div>
 </div>
 
 <script>
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const cmdId = btn.getAttribute('data-cmd');
-            const codeBlock = document.getElementById(cmdId);
-            const text = codeBlock.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'Copied!';
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                }, 1500);
-            }).catch(() => {
-                alert('Failed to copy');
+    // ----- Константы -----
+    const DEFAULT_PROXY_LIST_URL = "https://raw.githubusercontent.com/vangrapf/proxylist/refs/heads/main/proxylist.txt";
+
+    // ----- Состояние -----
+    let currentProxy = '';
+    let proxyListUrl = DEFAULT_PROXY_LIST_URL;
+    let proxyList = [];
+    let dlController = null; // для возможности отмены
+
+    // ----- DOM -----
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    const proxyInput = document.getElementById('proxyInput');
+    const proxyListInput = document.getElementById('proxyListInput');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const statusMsg = document.getElementById('statusMessage');
+    const mainArea = document.getElementById('mainArea');
+    const proxyStatusLabel = document.getElementById('proxyStatusLabel');
+    const toast = document.getElementById('toast');
+    const downloadModal = document.getElementById('downloadModal');
+    const dlTitle = document.getElementById('dlTitle');
+    const dlProgress = document.getElementById('dlProgress');
+    const dlStatus = document.getElementById('dlStatus');
+    const dlCloseBtn = document.getElementById('dlCloseBtn');
+
+    // ----- Настройки: загрузка/сохранение -----
+    function loadSettings() {
+        const saved = localStorage.getItem('vangrapf_settings');
+        if (saved) {
+            try {
+                const settings = JSON.parse(saved);
+                proxyListUrl = settings.proxyListUrl || DEFAULT_PROXY_LIST_URL;
+                currentProxy = settings.proxy || '';
+                proxyInput.value = currentProxy;
+                proxyListInput.value = proxyListUrl;
+            } catch (e) {}
+        } else {
+            proxyInput.value = '';
+            proxyListInput.value = DEFAULT_PROXY_LIST_URL;
+        }
+    }
+
+    function saveSettings() {
+        const settings = {
+            proxy: proxyInput.value.trim(),
+            proxyListUrl: proxyListInput.value.trim()
+        };
+        localStorage.setItem('vangrapf_settings', JSON.stringify(settings));
+        if (settings.proxy) {
+            currentProxy = settings.proxy;
+            updateProxyStatus('manual');
+            showStatus('Proxy set manually');
+        } else {
+            findWorkingProxy();
+        }
+        closeModal();
+    }
+
+    // ----- Загрузка списка прокси -----
+    async function loadProxyList() {
+        try {
+            const resp = await fetch(proxyListUrl);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const text = await resp.text();
+            const lines = text.split(/\r?\n/);
+            const proxies = [];
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed && !trimmed.startsWith('#')) {
+                    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                        proxies.push(trimmed.replace(/\/$/, ''));
+                    }
+                }
+            }
+            proxyList = proxies;
+            return proxies;
+        } catch (err) {
+            console.error('Failed to load proxy list:', err);
+            showStatus('Failed to load proxy list', true);
+            return [];
+        }
+    }
+
+    // ----- Поиск работающего прокси -----
+    async function findWorkingProxy() {
+        const proxies = await loadProxyList();
+        if (!proxies.length) {
+            proxyStatusLabel.textContent = 'no proxies';
+            showStatus('Proxy list is empty. Check settings.', true);
+            return;
+        }
+        proxyStatusLabel.textContent = 'checking...';
+        for (const proxy of proxies) {
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 5000);
+                const resp = await fetch(`${proxy}/health`, { signal: controller.signal });
+                clearTimeout(timeout);
+                if (resp.ok) {
+                    currentProxy = proxy;
+                    updateProxyStatus('online');
+                    showStatus(`Proxy found: ${proxy}`);
+                    const settings = JSON.parse(localStorage.getItem('vangrapf_settings') || '{}');
+                    settings.proxy = proxy;
+                    localStorage.setItem('vangrapf_settings', JSON.stringify(settings));
+                    return;
+                }
+            } catch (e) {
+                // пробуем следующий
+            }
+        }
+        proxyStatusLabel.textContent = 'not found';
+        showStatus('No working proxy found', true);
+    }
+
+    function updateProxyStatus(type) {
+        if (type === 'online') {
+            proxyStatusLabel.textContent = 'online';
+            proxyStatusLabel.className = 'proxy-status online';
+        } else if (type === 'manual') {
+            proxyStatusLabel.textContent = 'manual';
+            proxyStatusLabel.className = 'proxy-status';
+        } else {
+            proxyStatusLabel.textContent = 'loading...';
+            proxyStatusLabel.className = 'proxy-status';
+        }
+    }
+
+    // ----- Поиск -----
+    async function search() {
+        const query = searchInput.value.trim();
+        if (!query) {
+            showStatus('Enter a search query', true);
+            return;
+        }
+        if (!currentProxy) {
+            showStatus('Proxy not found. Check settings.', true);
+            return;
+        }
+        resultsContainer.innerHTML = '';
+        showStatus('Searching...');
+        mainArea.classList.add('has-results');
+
+        try {
+            const url = `${currentProxy}/search`;
+            const resp = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query })
             });
+            if (!resp.ok) {
+                const err = await resp.text();
+                throw new Error(`HTTP ${resp.status}: ${err.slice(0, 100)}`);
+            }
+            const data = await resp.json();
+            let videos = [];
+            if (Array.isArray(data)) {
+                videos = data;
+            } else if (data.results && Array.isArray(data.results)) {
+                videos = data.results;
+            } else if (data.items && Array.isArray(data.items)) {
+                videos = data.items;
+            } else if (data.videos && Array.isArray(data.videos)) {
+                videos = data.videos;
+            } else {
+                console.warn('Unexpected response format:', data);
+                showStatus('Unexpected response format', true);
+                return;
+            }
+            if (!videos.length) {
+                showStatus('No results');
+                return;
+            }
+            renderResults(videos);
+            showStatus(`Found ${videos.length} videos`);
+        } catch (err) {
+            showStatus('Search error: ' + err.message, true);
+            console.error(err);
+        }
+    }
+
+    function renderResults(videos) {
+        resultsContainer.innerHTML = '';
+        for (const video of videos) {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            const url = video.url || '';
+            const title = video.title || 'No title';
+            const channel = video.channel || video.uploader || video.author || '';
+            const duration = video.duration ? formatDuration(video.duration) : '';
+            const uploadDate = video.upload_date || video.published || '';
+            const publishedFormatted = uploadDate ? formatDate(uploadDate) : '';
+
+            card.innerHTML = `
+                <div class="video-cover">Unloadable cover</div>
+                <div class="info">
+                    <div class="title">${escapeHtml(title)}</div>
+                    <div class="channel">${escapeHtml(channel)}</div>
+                    <div class="duration">${duration}</div>
+                    <div class="published">${publishedFormatted}</div>
+                </div>
+                <div class="actions">
+                    <button class="copy-btn" data-url="${url}">Copy link</button>
+                    <button class="download-btn" data-url="${url}">Download</button>
+                </div>
+            `;
+            // Клик по кнопке "Copy link"
+            const copyBtn = card.querySelector('.copy-btn');
+            copyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                copyStreamLink(url);
+            });
+            // Клик по кнопке "Download"
+            const downloadBtn = card.querySelector('.download-btn');
+            downloadBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startDownload(url, title);
+            });
+            // Клик по карточке тоже копирует ссылку (удобно)
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                copyStreamLink(url);
+            });
+            resultsContainer.appendChild(card);
+        }
+    }
+
+    function formatDuration(seconds) {
+        if (!seconds) return '';
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        if (h > 0) {
+            return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        } else {
+            return `${m}:${String(s).padStart(2, '0')}`;
+        }
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        // expected format: YYYYMMDD or YYYY-MM-DD
+        let cleaned = dateStr.replace(/-/g, '');
+        if (cleaned.length === 8) {
+            const year = cleaned.slice(0, 4);
+            const month = cleaned.slice(4, 6);
+            const day = cleaned.slice(6, 8);
+            return `${day}.${month}.${year}`;
+        } else {
+            // if format unknown, return as is
+            return dateStr;
+        }
+    }
+
+    // ----- Копирование ссылки без кодирования -----
+    function copyStreamLink(videoUrl) {
+        if (!currentProxy) {
+            showStatus('Proxy not found', true);
+            return;
+        }
+        const streamUrl = `${currentProxy}/stream?url=${videoUrl}`;
+        navigator.clipboard.writeText(streamUrl).then(() => {
+            showToast('Copied');
+        }).catch(() => {
+            const input = document.createElement('input');
+            input.value = streamUrl;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showToast('Copied');
         });
+    }
+
+    // ----- Скачивание с прогрессом -----
+    async function startDownload(videoUrl, title) {
+        if (!currentProxy) {
+            showStatus('Proxy not found', true);
+            return;
+        }
+        // Показываем модалку
+        downloadModal.classList.add('active');
+        dlTitle.textContent = `Downloading: ${title.slice(0, 40)}...`;
+        dlProgress.style.width = '0%';
+        dlStatus.textContent = '0%';
+        const closeBtn = dlCloseBtn;
+        // Отмена (прерываем fetch)
+        if (dlController) {
+            dlController.abort();
+        }
+        dlController = new AbortController();
+        let cancelled = false;
+
+        // Обработчик кнопки Cancel
+        const cancelHandler = () => {
+            cancelled = true;
+            dlController.abort();
+            downloadModal.classList.remove('active');
+            showStatus('Download cancelled');
+        };
+        closeBtn.onclick = cancelHandler;
+
+        try {
+            const response = await fetch(`${currentProxy}/download`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: videoUrl }),
+                signal: dlController.signal
+            });
+            if (!response.ok) {
+                const err = await response.text();
+                throw new Error(`HTTP ${response.status}: ${err.slice(0, 100)}`);
+            }
+            const contentLength = response.headers.get('content-length');
+            const total = contentLength ? parseInt(contentLength, 10) : 0;
+            const reader = response.body.getReader();
+            const chunks = [];
+            let received = 0;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                received += value.length;
+                if (total) {
+                    const percent = Math.round((received / total) * 100);
+                    dlProgress.style.width = `${percent}%`;
+                    dlStatus.textContent = `${percent}% (${formatBytes(received)} / ${formatBytes(total)})`;
+                } else {
+                    dlStatus.textContent = `Downloaded ${formatBytes(received)} (unknown total)`;
+                }
+            }
+
+            if (cancelled) return;
+
+            const blob = new Blob(chunks);
+            // Определяем имя файла из Content-Disposition или из заголовка
+            const contentDisposition = response.headers.get('content-disposition');
+            let filename = 'video.mp4';
+            if (contentDisposition) {
+                const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                if (match && match[1]) filename = match[1].replace(/['"]/g, '');
+            } else {
+                // fallback: используем название видео
+                filename = `${title.replace(/[^a-zA-Zа-яА-Я0-9]/g, '_')}.mp4`;
+            }
+            // Скачиваем
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('Download complete');
+            downloadModal.classList.remove('active');
+        } catch (err) {
+            if (err.name === 'AbortError') {
+                // отмена
+                downloadModal.classList.remove('active');
+                showStatus('Download cancelled');
+            } else {
+                downloadModal.classList.remove('active');
+                showStatus('Download error: ' + err.message, true);
+                console.error(err);
+            }
+        } finally {
+            dlController = null;
+            closeBtn.onclick = null; // убираем обработчик
+        }
+    }
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // ----- Утилиты -----
+    function showToast(text) {
+        toast.textContent = text;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 1500);
+    }
+
+    function showStatus(msg, isError = false) {
+        statusMsg.textContent = msg;
+        statusMsg.className = 'status' + (isError ? ' error' : '');
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ----- Модалка настроек -----
+    function openModal() {
+        settingsModal.classList.add('active');
+        proxyInput.value = currentProxy;
+        proxyListInput.value = proxyListUrl;
+    }
+
+    function closeModal() {
+        settingsModal.classList.remove('active');
+    }
+
+    settingsToggle.addEventListener('click', openModal);
+    closeSettingsBtn.addEventListener('click', closeModal);
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) closeModal();
     });
+    saveSettingsBtn.addEventListener('click', saveSettings);
+
+    // ----- События -----
+    searchBtn.addEventListener('click', search);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') search();
+    });
+
+    // ----- Инициализация -----
+    loadSettings();
+    if (currentProxy) {
+        updateProxyStatus('manual');
+        showStatus(`Proxy: ${currentProxy}`);
+        fetch(`${currentProxy}/health`).then(r => {
+            if (r.ok) updateProxyStatus('online');
+        }).catch(() => {});
+    } else {
+        findWorkingProxy();
+    }
 </script>
 </body>
 </html>

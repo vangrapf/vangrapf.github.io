@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Vangrapf</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a0a;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #f0f0f0;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff0050, #ff9900);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+        .card {
+            background: #1e1e1e;
+            border-radius: 32px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2c2c2c;
+            transition: 0.2s;
+        }
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ff9900;
+            padding-left: 1rem;
+        }
+        .warning {
+            background: #2a1a0a;
+            border-left: 4px solid #ff9900;
+            color: #ffcc88;
+        }
+        .code-block {
+            background: #0a0a0a;
+            border-radius: 16px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            border: 1px solid #2c2c2c;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: #2c2c2c;
+            border: none;
+            color: #ff9900;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            float: right;
+            margin-top: -2rem;
+            transition: 0.2s;
+        }
+        .copy-btn:hover {
+            background: #3a3a3a;
+        }
+        .grid-2 {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .grid-2 > div {
+            flex: 1;
+            min-width: 250px;
+        }
+        .btn {
+            display: inline-block;
+            background: #ff9900;
+            color: #0a0a0a;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #ffaa22;
+        }
+        hr {
+            border-color: #2c2c2c;
+            margin: 1.5rem 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 3rem;
+        }
+        @media (max-width: 700px) {
+            .card {
+                padding: 1rem;
+            }
+            .card-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">Vangrapf</div>
+        <div class="tagline">watch and download videos without blocks and ads</div>
+    </div>
+
+    <div class="card warning">
+        <div class="card-title">Web service temporarily unavailable</div>
+        <p>Due to maintenance or high load, our online player is currently down. However, you can use <strong>Vangrapf CLI</strong> — it is fully functional and works on any platform (Linux, Windows, macOS).</p>
+        <p>With the CLI you can watch and download videos from <strong>YouTube, RuTube, VK Video, OK</strong> without ads, through your own proxy or directly.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Quick installation of Vangrapf CLI</div>
+        <p>All you need is <strong>Python 3.8+</strong> and <code>pip</code>. The <strong>mpv</strong> player is required for watching (instructions below).</p>
+
+        <div class="grid-2">
+            <div>
+                <h3>Linux / macOS</h3>
+                <div class="code-block" id="linuxCmd">
+                    <pre>curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py | python - --help</pre>
+                </div>
+                <button class="copy-btn" data-cmd="linuxCmd">Copy</button>
+                <p style="margin-top: 0.5rem;">Install dependencies:</p>
+                <div class="code-block" id="linuxPip">
+                    <pre>pip install yt-dlp rich requests</pre>
+                </div>
+                <button class="copy-btn" data-cmd="linuxPip">Copy</button>
+                <p style="margin-top: 0.5rem;">Install mpv:</p>
+                <div class="code-block" id="linuxMpv">
+                    <pre>sudo apt install mpv   # Debian/Ubuntu<br>brew install mpv       # macOS</pre>
+                </div>
+                <button class="copy-btn" data-cmd="linuxMpv">Copy</button>
+            </div>
+            <div>
+                <h3>Windows (PowerShell)</h3>
+                <div class="code-block" id="winCmd">
+                    <pre>curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py | python --help</pre>
+                </div>
+                <button class="copy-btn" data-cmd="winCmd">Copy</button>
+                <p style="margin-top: 0.5rem;">Install dependencies:</p>
+                <div class="code-block" id="winPip">
+                    <pre>pip install yt-dlp rich requests</pre>
+                </div>
+                <button class="copy-btn" data-cmd="winPip">Copy</button>
+                <p style="margin-top: 0.5rem;">Install mpv:</p>
+                <div class="code-block" id="winMpv">
+                    <pre>Download mpv from https://mpv.io/installation/ and add to PATH</pre>
+                </div>
+                <button class="copy-btn" data-cmd="winMpv">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Cookies for YouTube (recommended)</div>
+        <p>To bypass YouTube blocking, export cookies from your browser and pass them to the script:</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>Install the extension <strong>"Get cookies.txt LOCALLY"</strong> (Chrome/Firefox).</li>
+            <li>Log into YouTube, click the extension icon → Export → save <code>cookies.txt</code>.</li>
+            <li>Pass the file with <code>--cookies ./cookies.txt</code> when running.</li>
+        </ol>
+        <div class="code-block" id="cookiesExample">
+            <pre>python <(curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py) --watch "https://youtu.be/dQw4w9WgXcQ" --cookies ./cookies.txt</pre>
+        </div>
+        <button class="copy-btn" data-cmd="cookiesExample">Copy</button>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Usage examples</div>
+        <div class="code-block" id="exampleWatch">
+            <pre># Watch video (with auto-proxy for YouTube)
+python <(curl -s https://raw.githubusercontent.com/vangrapf/vangrapf-cli/main/main.py) --watch "https://youtu.be/dQw4w9WgXcQ" --cookies cookies.txt
+
+# Download video from RuTube (proxy not needed)
+python <(curl -s ...) --download "https://rutube.ru/video/6d2c586de0a03c9b885ddfd2c5c7b456/" -o ~/Videos/
+
+# Search and watch
+python <(curl -s ...) --search "cute cats" --watch --cookies cookies.txt
+
+# Use your own proxy
+python <(curl -s ...) --watch "URL" --proxy https://your-proxy.onrender.com</pre>
+        </div>
+        <button class="copy-btn" data-cmd="exampleWatch">Copy</button>
+        <p style="margin-top: 1rem;">Full list of options: <code>--help</code></p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Troubleshooting: ModuleNotFoundError: No module named 'rich'</div>
+        <p>If you installed dependencies but the script still cannot find <strong>rich</strong>, try the following:</p>
+        <ul style="margin-left: 1.5rem;">
+            <li>Make sure you are using the <strong>same Python interpreter</strong> that you used to install packages. Check <code>which python</code> and <code>which pip</code> – paths should match.</li>
+            <li>Install rich explicitly for the current user: <code>python -m pip install rich --user</code> (Linux/macOS) or <code>py -m pip install rich --user</code> (Windows).</li>
+            <li>If using a virtual environment, activate it before running.</li>
+            <li>Reinstall rich: <code>pip uninstall rich -y && pip install rich</code>.</li>
+            <li>On Windows, run PowerShell <strong>as Administrator</strong> when installing.</li>
+        </ul>
+        <p>If nothing helps, clear pip cache: <code>pip cache purge</code> and install again.</p>
+    </div>
+
+    <div class="footer">
+        Vangrapf is a free project that does not violate copyright. You use the official YouTube IFrame or direct links via proxy.<br>
+        Repository: <a href="https://github.com/vangrapf/vangrapf-cli" style="color:#ff9900;">github.com/vangrapf/vangrapf-cli</a>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cmdId = btn.getAttribute('data-cmd');
+            const codeBlock = document.getElementById(cmdId);
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                }, 1500);
+            }).catch(() => {
+                alert('Failed to copy');
+            });
+        });
+    });
+</script>
+</body>
+</html>
