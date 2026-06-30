@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vangrapf · Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #161616;
+            border-radius: 32px;
+            padding: 40px 50px;
+            border: 1px solid #2a2a2a;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff0050, #ff9900);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.2rem;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 1.2rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ff9900;
+            padding-left: 16px;
+        }
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            margin-bottom: 0.6rem;
+            color: #ff9900;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.2rem;
+        }
+        li {
+            margin-bottom: 0.4rem;
+        }
+        code {
+            background: #1a1a1a;
+            padding: 0.2rem 0.6rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #ffaa66;
+        }
+        pre {
+            background: #1a1a1a;
+            padding: 16px 20px;
+            border-radius: 16px;
+            overflow-x: auto;
+            border: 1px solid #2a2a2a;
+            margin: 1.2rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        .note {
+            background: #1a1a1a;
+            border-left: 4px solid #ff9900;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            color: #ccc;
+        }
+        .note strong {
+            color: #ff9900;
+        }
+        a {
+            color: #ff9900;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #2a2a2a;
+            margin: 2.5rem 0;
+        }
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 1.5rem;
+        }
+        .badge {
+            display: inline-block;
+            background: #2a6a2a;
+            color: #8f8;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Vangrapf</h1>
+    <div class="subtitle">Documentation — watch and download YouTube videos via proxy</div>
+
+    <p>
+        Vangrapf is a web interface that lets you search, watch, and download YouTube videos through a proxy server.
+        It helps bypass regional blocks and removes ads. You can use either a public proxy list or your own server.
+    </p>
+
+    <h2>Quick Start</h2>
+    <ol>
+        <li><strong>Open the Vangrapf page</strong> in your browser.</li>
+        <li><strong>Set up a proxy</strong> (optional) – click the ☰ icon in the top-right, enter your proxy URL (e.g., <code>https://your-proxy.onrender.com</code>), and save. If left empty, the site will automatically pick a working proxy from the public list.</li>
+        <li><strong>Search for a video</strong> – type a query in the search bar and press Enter or click Search.</li>
+        <li><strong>Choose an action</strong> – for each video you can:
+            <ul>
+                <li><strong>Copy link</strong> – click the video card or the “Copy link” button. This copies a stream URL like <code>https://proxy/stream?url=https://youtube.com/watch?v=...</code>.</li>
+                <li><strong>Download</strong> – click the “Download” button. A progress window appears and the video will be saved as <code>video.mp4</code>.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Using the Copied Stream URL with Media Players</h2>
+
+    <h3>MPV (recommended)</h3>
+    <p>
+        MPV is a fast, lightweight player with excellent support for streaming and seeking (Range requests).
+    </p>
+    <ol>
+        <li><a href="https://mpv.io/installation/" target="_blank">Install MPV</a> for your OS.</li>
+        <li>Open a terminal and run:
+            <pre><code>mpv "https://your-proxy/stream?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ"</code></pre>
+            Replace the URL with the one you copied.
+        </li>
+        <li>Control playback with standard MPV keys (Space to pause, arrow keys to seek, etc.).</li>
+    </ol>
+
+    <h3>VLC media player</h3>
+    <p>
+        VLC can open network streams directly.
+    </p>
+    <ol>
+        <li>Launch VLC.</li>
+        <li>Go to <strong>Media → Open Network Stream</strong> (or press <kbd>Ctrl+N</kbd>).</li>
+        <li>Paste the copied stream URL into the network address field.</li>
+        <li>Click <strong>Play</strong>. The video will start streaming.</li>
+    </ol>
+
+    <h3>Windows Media Player (WMP)</h3>
+    <p>
+        WMP does not support network streaming directly. However, you can:
+    </p>
+    <ul>
+        <li>Use the <strong>Download</strong> button on the Vangrapf site to save the video as an MP4 file, then open it in WMP.</li>
+        <li>Alternatively, install a more capable player like MPV or VLC.</li>
+    </ul>
+
+    <h3>Xplayer (Android)</h3>
+    <p>
+        If you copy Vangrapf video link, Xplayer found it.
+    </p>
+    <ol>
+        <li>Launch Xplayer.</li>
+        <li>Right-click the player window and choose <strong>Open Location</strong> (or find it in the File menu).</li>
+        <li>Paste the stream URL and click Open.</li>
+        <li>Playback should start automatically (seeking may work depending on the version).</li>
+    </ol>
+
+    <h3>Other players</h3>
+    <p>
+        Most modern players (e.g., PotPlayer, KMPlayer, SMPlayer) support opening URLs. Look for options like <strong>Open URL</strong> or <strong>Open Network Stream</strong>.
+    </p>
+
+    <div class="note">
+        <strong>Tip:</strong> You can also open the copied URL directly in your browser – the HTML5 video player will attempt to play it. However, seeking and controls might be limited compared to dedicated players.
+    </div>
+
+    <h2>Quality Control</h2>
+    <p>
+        By default, Vangrapf serves the best quality that is compatible with browsers (MP4/H.264 with audio). You can add the <code>&quality=</code> parameter to the stream URL to change it:
+    </p>
+    <ul>
+        <li><code>&quality=720</code> – 720p (if available)</li>
+        <li><code>&quality=best</code> – highest quality (may lack audio if FFmpeg is not installed on the proxy server)</li>
+        <li><code>&quality=max</code> – full quality with audio merged (requires FFmpeg on the server)</li>
+    </ul>
+    <p>Example: <code>https://proxy/stream?url=...&quality=720</code></p>
+
+    <h2>Proxy Settings</h2>
+    <p>
+        To change the proxy server, click the ☰ icon in the top-right corner. You can:
+    </p>
+    <ul>
+        <li>Enter a custom proxy URL (e.g., your self-hosted Vangrapf backend).</li>
+        <li>Provide a custom URL for the proxy list (default is Vangrapf’s public list).</li>
+        <li>Leave the fields empty to use the default automatic proxy selection.</li>
+    </ul>
+    <p>Settings are saved in your browser’s local storage.</p>
+
+    <h2>Troubleshooting</h2>
+    <ul>
+        <li><strong>Proxy not working?</strong> – Check if the proxy is reachable by visiting <code>https://proxy/health</code>. If not, choose another proxy.</li>
+        <li><strong>Download interrupted?</strong> – Click Cancel and try again. Ensure you have enough disk space and a stable connection.</li>
+        <li><strong>No results found?</strong> – Make sure you typed the query correctly and that the proxy is online. Some proxies might block search.</li>
+        <li><strong>Video doesn't play in the player?</strong> – Verify that the copied URL includes the full <code>https://</code> and that your player supports the media type (MP4).</li>
+    </ul>
+
+    <hr>
+
+    <h2>Summary</h2>
+    <p>
+        Vangrapf gives you a simple way to watch and download YouTube videos without ads or regional restrictions.
+        Use the copy‑link feature to play videos in your favourite player, or download them directly for offline viewing.
+        The tool works with your own proxy or with the public proxy list provided by the Vangrapf project.
+    </p>
+    <p>
+        For more information, check the <a href="https://github.com/vangrapf/vangrapf-proxy-DeployF" target="_blank">GitHub repository</a>.
+    </p>
+
+    <div class="footer">
+        &copy; Vangrapf created by Kolyadual and published by Runget Team &bull; Documentation version 3.0
+    </div>
+</div>
+</body>
+</html>
